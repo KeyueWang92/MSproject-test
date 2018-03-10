@@ -47,17 +47,19 @@ class Parser{
 }
 
 class Candidate{
-  String name;
-  String lastname;
-  String state;
-  String party;
-  float[] funding;
+  private String name;
+  private String lastname;
+  private String state;
+  private String party;
+  private float[] funding;
+  boolean selected;
   Candidate(String lastname, String name, String state, String party, float[] funding){
     this.lastname = lastname;
     this.name = name;
     this.state = state;
     this.party = party;
     this.funding = funding;
+    this.selected = false;
   }
   public String getName(){
     return this.name;

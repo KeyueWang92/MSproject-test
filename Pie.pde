@@ -35,9 +35,11 @@ class Pie{
     for(Slice s:s_to_show){
       if(can != null && s.name.equals(can.name)){
         s.highlight = true;
-      }else if(can2 != null && s.name.equals(can2.name)){
-        s.highlight = true;
-      }else if(s.state.equals(STATE_MAP)){
+      }
+      //else if(can2 != null && s.name.equals(can2.name)){
+      //  s.highlight = true;
+      //}
+      else if(s.state.equals(STATE_MAP)){
         s.highlight = true;
       }else if(can_hover != -1 && p.candidates[can_hover].name.equals(s.name)){
         s.highlight = true;
@@ -77,11 +79,18 @@ class Pie{
   //filter the data by the party it belongs to
   ArrayList<Slice> data_filter(){
     ArrayList<Slice> ss = new ArrayList<Slice>();
-    for(Slice s:slices){
-      if(PARTY.equals("ALL_PARTY")){
-        ss.add(s);
-      }else if(PARTY.equals(s.party)){
-        ss.add(s);
+    if (selected_mode) {
+      for(int i = 0; i < slices.size(); i++){
+        if (p.candidates[i].selected) ss.add(slices.get(i));
+      }
+    }
+    else {
+      for(Slice s:slices){
+        if(PARTY.equals("ALL_PARTY")){
+          ss.add(s);
+        }else if(PARTY.equals(s.party)){
+          ss.add(s);
+        }
       }
     }
     return ss;

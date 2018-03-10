@@ -10,8 +10,8 @@ Map map;
 Pie pie_chart;
 Line_Chart lc;
 Candidate can;
-Candidate can2;
-boolean loop;
+//Candidate can2;
+boolean loop, selected_mode;
 int count;
 int can_hover;
 
@@ -26,8 +26,9 @@ void setup(){
   pie_chart = new Pie(p);
   lc = new Line_Chart(p);
   can = null;
-  can2 = null;
+  //can2 = null;
   loop = false;
+  selected_mode = false;
   count = 0;
 }
 
@@ -61,17 +62,21 @@ void draw(){
 void mouseClicked(){
   if(mouseButton == LEFT){
     can = pie_chart.clicked();
-    can2 = lc.clicked();
+    //can2 = lc.clicked();
+    selected_mode = lc.clicked();
+    if (selected_mode) can = null;
     TIME = lc.click_time();
     if(can != null){
       PARTY = can.party;
       STATE = can.state;
       STATE_MAP = "";
-    }else if(can2 != null){
-      PARTY = "ALL_PARTY"; 
-      STATE = can2.state;
-      STATE_MAP = "";
-    }else if (mouseX >= 620 && mouseX <= 700 && mouseY >= 720 && mouseY <= 750) {
+    }
+    //else if(can2 != null){
+    //  PARTY = "ALL_PARTY"; 
+    //  STATE = can2.state;
+    //  STATE_MAP = "";
+    //}
+    else if (mouseX >= 620 && mouseX <= 700 && mouseY >= 720 && mouseY <= 750) {
       loop = true;
       TIME = 0;
     }else
@@ -98,9 +103,11 @@ void mouseClicked(){
     STATE = "ALL_STATE";
     STATE_MAP = "";
     can = null;
-    can2 = null;
+    //can2 = null;
     TIME = 8;
     loop = false;
+    selected_mode = false;
+    lc.reset();
   }
   
   int id = geoMap.getID(mouseX, mouseY);

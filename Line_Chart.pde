@@ -111,7 +111,27 @@ class Line_Chart{
     draw_buttons();
     
     //draw lines
-    if (STATE.equals("ALL_STATE") && PARTY.equals("ALL_PARTY")){
+       
+    //highlight line for hover
+    if(can_hover != -1){
+      for(int i = 0; i < p.candidates.length;i++){
+        if (i != can_hover){
+          fill(200);
+          stroke(200);
+          draw_aline(lines.get(i));
+        }        
+      }
+      fill(colors[can_hover][0], colors[can_hover][1], colors[can_hover][2]);
+      stroke(colors[can_hover][0], colors[can_hover][1], colors[can_hover][2]);
+      draw_aline(lines.get(can_hover));
+      fill(255);
+      strokeWeight(4);
+      textSize(25);
+      text(p.candidates[can_hover].name+": $"+p.candidates[can_hover].funding[TIME]/1000000+"M",600,400);
+      strokeWeight(1);
+      textSize(12);
+    }
+    else if (STATE.equals("ALL_STATE") && PARTY.equals("ALL_PARTY")){
       for(int i = 0; i < fundings.length; i++){
         fill(colors[i][0], colors[i][1], colors[i][2]);
         stroke(colors[i][0], colors[i][1], colors[i][2]);
@@ -119,20 +139,20 @@ class Line_Chart{
       }
     } 
     // for selected candidate
-    else if (can2 != null){
-      int canid = 0;
-      for(int i = 0; i < p.candidates.length; i++){
-        if (can != p.candidates[i]) {
-          fill(220);
-          stroke(220);
-          draw_aline(lines.get(i));
-        }
-        else canid = i;
-      }
-      fill(colors[canid][0], colors[canid][1], colors[canid][2]);
-      stroke(colors[canid][0], colors[canid][1], colors[canid][2]);
-      draw_aline(lines.get(canid));
-    } 
+    //else if (can2 != null){
+    //  int canid = 0;
+    //  for(int i = 0; i < p.candidates.length; i++){
+    //    if (can != p.candidates[i]) {
+    //      fill(220);
+    //      stroke(220);
+    //      draw_aline(lines.get(i));
+    //    }
+    //    else canid = i;
+    //  }
+    //  fill(colors[canid][0], colors[canid][1], colors[canid][2]);
+    //  stroke(colors[canid][0], colors[canid][1], colors[canid][2]);
+    //  draw_aline(lines.get(canid));
+    //} 
     // for selected party
     else if (can != null){
       String par = PARTY;
@@ -168,25 +188,21 @@ class Line_Chart{
       }
     }
     
-    //highlight line for hover
-    if(can_hover != -1){
+    //for selected_mode
+    else if (selected_mode) {
       for(int i = 0; i < p.candidates.length;i++){
-        if (i != can_hover){
+        if(p.candidates[i].selected) {
+          fill(colors[i][0], colors[i][1], colors[i][2]);
+          stroke(colors[i][0], colors[i][1], colors[i][2]);
+        }
+        else {
           fill(200);
           stroke(200);
-          draw_aline(lines.get(i));
-        }        
+        }
+        draw_aline(lines.get(i));
       }
-      fill(colors[can_hover][0], colors[can_hover][1], colors[can_hover][2]);
-      stroke(colors[can_hover][0], colors[can_hover][1], colors[can_hover][2]);
-      draw_aline(lines.get(can_hover));
-      fill(255);
-      strokeWeight(4);
-      textSize(25);
-      text(p.candidates[can_hover].name+": $"+p.candidates[can_hover].funding[TIME]/1000000+"M",600,400);
-      strokeWeight(1);
-      textSize(12);
     }
+ 
   }
   
   void draw_axis(){
@@ -270,21 +286,34 @@ class Line_Chart{
   
   void draw_buttons(){
     for (int i = 0; i < p.candidates.length; i++){
-      if (bs[i].isMouseOn()) fill(255);
+      if (bs[i].isMouseOn() || p.candidates[i].selected) fill(255);
       else fill(bs[i].c);
       bs[i].draw();
     }
   }
   
-  Candidate clicked(){
+  //Candidate clicked(){
+  //  for(int i = 0; i < bs.length; i++){
+  //    if(bs[i].isMouseOn()){
+  //      return p.candidates[i];
+  //    }
+  //  }
+  //  return null;
+  //}
+  
+  boolean clicked(){
     for(int i = 0; i < bs.length; i++){
       if(bs[i].isMouseOn()){
-        return p.candidates[i];
+        p.candidates[i].selected = !p.candidates[i].selected;
+        println(i);
+      }
+      if(p.candidates[i].selected) {
+        println("t");
+        return true;
       }
     }
-    return null;
+    return false;
   }
-  
   int click_time(){
     for (int i = 0; i < 9; i++){
       if (mouseX >= (2 * gap + 60 + i * (width_bar+gap)) && mouseX <= (2 * gap + 60 + (i+1) * (width_bar+gap))
@@ -305,5 +334,9 @@ class Line_Chart{
     }
     return -1;
   }
-  
+  void reset(){
+    for(int i = 0; i < p.candidates.length; i++){
+      p.candidates[i].selected = false;
+    }
+  }
 }
