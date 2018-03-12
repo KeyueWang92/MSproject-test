@@ -103,17 +103,35 @@ class Line_Chart{
   void draw(){    
     //if state == ALL
     //draw_background
+    if (!loop) {
+      draw_axis();
+      line_TIME = TIME;
+    }
     fill(230);
     stroke(230);
-    rect(2*gap+60,120,(width_bar+gap)*(TIME), 640);
-    
-    draw_axis();
+    rect(2*gap+60,120,(width_bar+gap)*(line_TIME), 640);
     draw_buttons();
-    
+
+    if (loop) {
+      //if (count < 80) {
+        for(int i = 0; i < p.candidates.length;i++){
+          fill(colors[i][0], colors[i][1], colors[i][2]);
+          stroke(colors[i][0], colors[i][1], colors[i][2]);
+          draw_aline(lines.get(i));
+        }
+        //draw white block to cover the lines
+        fill(255);
+        stroke(255);
+        rect(2*gap+60+(width_bar+gap)*(float)count/10,120,(width_bar+gap)*(line_TIME-(float)count/10), 640);
+        draw_axis();
+      //} else {
+      //  count = 0;
+      //  loop = false;
+      //}
+    }
     //draw lines
-       
     //highlight line for hover
-    if(can_hover != -1){
+    else if(can_hover != -1){
       for(int i = 0; i < p.candidates.length;i++){
         if (i != can_hover){
           fill(200);
@@ -131,28 +149,6 @@ class Line_Chart{
       strokeWeight(1);
       textSize(12);
     }
-    else if (STATE.equals("ALL_STATE") && PARTY.equals("ALL_PARTY")){
-      for(int i = 0; i < fundings.length; i++){
-        fill(colors[i][0], colors[i][1], colors[i][2]);
-        stroke(colors[i][0], colors[i][1], colors[i][2]);
-        draw_aline(lines.get(i));
-      }
-    } 
-    // for selected candidate
-    //else if (can2 != null){
-    //  int canid = 0;
-    //  for(int i = 0; i < p.candidates.length; i++){
-    //    if (can != p.candidates[i]) {
-    //      fill(220);
-    //      stroke(220);
-    //      draw_aline(lines.get(i));
-    //    }
-    //    else canid = i;
-    //  }
-    //  fill(colors[canid][0], colors[canid][1], colors[canid][2]);
-    //  stroke(colors[canid][0], colors[canid][1], colors[canid][2]);
-    //  draw_aline(lines.get(canid));
-    //} 
     // for selected party
     else if (can != null){
       String par = PARTY;
@@ -202,7 +198,16 @@ class Line_Chart{
         draw_aline(lines.get(i));
       }
     }
- 
+    
+    //for the trend
+    
+   else if (STATE.equals("ALL_STATE") && PARTY.equals("ALL_PARTY")){
+      for(int i = 0; i < fundings.length; i++){
+        fill(colors[i][0], colors[i][1], colors[i][2]);
+        stroke(colors[i][0], colors[i][1], colors[i][2]);
+        draw_aline(lines.get(i));
+      }
+    } 
   }
   
   void draw_axis(){
@@ -237,7 +242,7 @@ class Line_Chart{
     //draw lines
     int time = 0;
     for(Line l: line){
-      if (time < TIME){ 
+      if (time < line_TIME){ 
         line(l.x1, l.y1, l.x2, l.y2);
         time++;
       }
@@ -245,12 +250,12 @@ class Line_Chart{
     //draw dots
     time = 0;
     for(int i = 0; i < line.size(); i++){
-      if (time <= TIME){ 
-        ellipse(line.get(i).x1,line.get(i).y1,5,5);
+      if (time <= line_TIME){ 
+        ellipse(line.get(i).x1,line.get(i).y1,3,3);
         time++;
       }
     }
-    if (TIME == 8) ellipse(line.get(line.size()-1).x2, line.get(line.size()-1).y2, 5,5);
+    if (TIME == 8) ellipse(line.get(line.size()-1).x2, line.get(line.size()-1).y2, 3,3);
   }
   
   void buttons(){
@@ -305,10 +310,8 @@ class Line_Chart{
     for(int i = 0; i < bs.length; i++){
       if(bs[i].isMouseOn()){
         p.candidates[i].selected = !p.candidates[i].selected;
-        println(i);
       }
       if(p.candidates[i].selected) {
-        println("t");
         return true;
       }
     }

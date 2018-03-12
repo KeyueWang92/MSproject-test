@@ -2,7 +2,7 @@ import org.gicentre.geomap.*;
 import java.util.*;
 GeoMap geoMap = new GeoMap(650,20,500,350,this);
 
-int TIME;
+int TIME, line_TIME, pie_TIME, map_TIME;
 String PARTY, STATE, STATE_MAP;
 HashMap<String, Integer> time_to_int;
 Parser p;
@@ -12,7 +12,7 @@ Line_Chart lc;
 Candidate can;
 //Candidate can2;
 boolean loop, selected_mode;
-int count;
+int count; //for the loop rate
 int can_hover;
 
 void setup(){
@@ -45,14 +45,19 @@ void draw(){
   fill(100);
   text("see the trend",620,720);
   if (loop == true) {
-    if (count == 10) {
+    PARTY = "ALL_PARTY";
+    STATE = "ALL_STATE";
+    STATE_MAP = "";
+    can = null;
+    selected_mode = false;
+    lc.reset();
+    if (count <= 80) {
+      TIME = count/10;
+      count++;
+    } else {
       count = 0;
-      TIME++;
-      TIME = TIME % 9;
-      PARTY = "ALL_PARTY";
-      STATE = "ALL_STATE";
+      loop = false;
     }
-    count++;
   }
   can_hover = lc.hover_button();
   can_hover = can_hover == -1 ? pie_chart.hover() : can_hover;
@@ -77,12 +82,19 @@ void mouseClicked(){
     //  STATE_MAP = "";
     //}
     else if (mouseX >= 620 && mouseX <= 700 && mouseY >= 720 && mouseY <= 750) {
+      println("loop");
       loop = true;
       TIME = 0;
-    }else
-    
+      line_TIME = 8;
+      PARTY = "ALL_PARTY";
+      STATE = "ALL_STATE";
+      STATE_MAP = "";
+      can = null;
+      selected_mode = false;
+      lc.reset();
+    }
     //get the clicked candidate from pie chart
-    if (map.clicked() != null){
+    else if (map.clicked() != null){
       STATE = map.clicked();
       STATE_MAP = map.clicked();
       PARTY = "ALL_PARTY";
