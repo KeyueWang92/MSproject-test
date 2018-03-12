@@ -45,6 +45,8 @@ class Line_Chart{
       stroke(255);
       rect(x,y,wid,hgt);
       textAlign(LEFT,TOP);
+      strokeWeight(1);
+      textSize(12);
       fill(20);
       text(lastname,x+2,y);
     }
@@ -104,7 +106,7 @@ class Line_Chart{
     //if state == ALL
     //draw_background
     if (!loop) {
-      draw_axis();
+      //draw_axis();
       line_TIME = TIME;
     }
     fill(230);
@@ -186,15 +188,20 @@ class Line_Chart{
     
     //for selected_mode
     else if (selected_mode) {
+      ArrayList<Integer> cans = new ArrayList<Integer>();
       for(int i = 0; i < p.candidates.length;i++){
         if(p.candidates[i].selected) {
-          fill(colors[i][0], colors[i][1], colors[i][2]);
-          stroke(colors[i][0], colors[i][1], colors[i][2]);
+          cans.add(i);
         }
         else {
           fill(200);
           stroke(200);
+          draw_aline(lines.get(i));
         }
+      }
+      for(int i = 0; i < cans.size(); i++){
+        fill(colors[i][0], colors[i][1], colors[i][2]);
+        stroke(colors[i][0], colors[i][1], colors[i][2]);
         draw_aline(lines.get(i));
       }
     }
@@ -208,6 +215,7 @@ class Line_Chart{
         draw_aline(lines.get(i));
       }
     } 
+    if (!loop) draw_axis();
   }
   
   void draw_axis(){
@@ -307,15 +315,17 @@ class Line_Chart{
   //}
   
   boolean clicked(){
+    boolean selected = false;
     for(int i = 0; i < bs.length; i++){
       if(bs[i].isMouseOn()){
         p.candidates[i].selected = !p.candidates[i].selected;
+        if (p.candidates[i].selected) println(i);
       }
       if(p.candidates[i].selected) {
-        return true;
+        selected = true;
       }
     }
-    return false;
+    return selected;
   }
   int click_time(){
     for (int i = 0; i < 9; i++){

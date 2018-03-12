@@ -39,11 +39,11 @@ void draw(){
   map.draw();
   pie_chart.draw();
   lc.draw();
-  fill(255);
+  fill(230);
   noStroke();
   rect(620,720,80,30);
   fill(100);
-  text("see the trend",620,720);
+  text("see the trend",620,730);
   if (loop == true) {
     PARTY = "ALL_PARTY";
     STATE = "ALL_STATE";
@@ -64,7 +64,7 @@ void draw(){
 }
 
 
-void mouseClicked(){
+void mousePressed(){
   if(mouseButton == LEFT){
     can = pie_chart.clicked();
     //can2 = lc.clicked();
