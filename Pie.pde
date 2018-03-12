@@ -20,13 +20,14 @@ class Pie{
                           p.candidates[i].getName(),
                           p.candidates[i].getFunding(),
                           p.candidates[i].getState());
-      if(s.party.equals("Republican")){
-        s.setColor(#ffb4b4);
-      }else if(s.party.equals("Democrat")){
-        s.setColor(#b5deff);
-      }else{
-        s.setColor(#b3f7af);
-      }        
+      //if(s.party.equals("Republican")){
+      //  s.setColor(#ffb4b4);
+      //}else if(s.party.equals("Democrat")){
+      //  s.setColor(#b5deff);
+      //}else{
+      //  s.setColor(#b3f7af);
+      //}        
+      s.setColor(color(p.colors[i][0],p.colors[i][1],p.colors[i][2]));
       slices.add(s);
     }
   }
@@ -50,7 +51,7 @@ class Pie{
     for(Slice s:s_to_show){
           if(s.show_data){
             //fill(#CCCC00);
-            fill(255);
+            fill(100);
             textSize(13);
             textAlign(CENTER, CENTER);
             text("Funding: "+s.value[TIME], mouseX, mouseY-35);

@@ -5,7 +5,10 @@ class Line_Chart{
   float gap;
   String[] months;
   float[][] fundings;
-  int[][] colors;
+  //int[][] colors;
+  //int[][] colors = {{255,230,230},{255,204,204},{255,179,179},{255,153,153},{255,128,128},{255,102,102},{255,77,77},{255,51,51},
+  //                      {255,26,26},{255,0,0},{230,0,0},{204,0,0},{179,0,0},{153,0,0},{128,0,0},{102,0,0},{77,0,0},
+  //                      {179,217,255},{128,191,255},{77,166,255},{25,140,255},{0,115,230},{159,223,191},{64,191,128},{45,134,89}};
   float x_frame = 60;
   float y_frame = 40;
   ArrayList<ArrayList<Line>> lines = new ArrayList<ArrayList<Line>>();
@@ -72,22 +75,22 @@ class Line_Chart{
       }
       this.lines.add(aline);
     }
-    this.set_color();
+    //this.set_color();
     width_bar = 0.65*0.8*600/months.length;
     gap = 0.35*0.8*600/months.length;
     this.arrange();
     this.buttons();
   }
   
-  void set_color(){
-    colors = new int[fundings.length][3];
-    float fre = 0.3;
-    for(int i = 0; i < fundings.length; i++){
-      colors[i][0] = int(sin(fre*(i+5)+0)*127+128);
-      colors[i][1] = int(sin(fre*(i+5)+2)*127+128);
-      colors[i][2] = int(sin(fre*(i+5)+4)*127+128);
-    }
-  }
+  //void set_color(){
+  //  colors = new int[fundings.length][3];
+  //  float fre = 0.3;
+  //  for(int i = 0; i < fundings.length; i++){
+  //    colors[i][0] = int(sin(fre*(i+5)+0)*127+128);
+  //    colors[i][1] = int(sin(fre*(i+5)+2)*127+128);
+  //    colors[i][2] = int(sin(fre*(i+5)+4)*127+128);
+  //  }
+  //}
   
   void arrange(){
     for (ArrayList<Line> line: lines){
@@ -113,23 +116,18 @@ class Line_Chart{
     stroke(230);
     rect(2*gap+60,120,(width_bar+gap)*(line_TIME), 640);
     draw_buttons();
-
+    if (!loop) draw_axis();
     if (loop) {
-      //if (count < 80) {
-        for(int i = 0; i < p.candidates.length;i++){
-          fill(colors[i][0], colors[i][1], colors[i][2]);
-          stroke(colors[i][0], colors[i][1], colors[i][2]);
-          draw_aline(lines.get(i));
-        }
-        //draw white block to cover the lines
-        fill(255);
-        stroke(255);
-        rect(2*gap+60+(width_bar+gap)*(float)count/10,120,(width_bar+gap)*(line_TIME-(float)count/10), 640);
-        draw_axis();
-      //} else {
-      //  count = 0;
-      //  loop = false;
-      //}
+      for(int i = 0; i < p.candidates.length;i++){
+        fill(p.colors[i][0], p.colors[i][1], p.colors[i][2]);
+        stroke(p.colors[i][0], p.colors[i][1], p.colors[i][2]);
+        draw_aline(lines.get(i));
+      }
+      //draw white block to cover the lines
+      fill(255);
+      stroke(255);
+      rect(2*gap+60+(width_bar+gap)*(float)count/10,120,(width_bar+gap)*(line_TIME-(float)count/10), 640);
+      draw_axis();
     }
     //draw lines
     //highlight line for hover
@@ -141,8 +139,8 @@ class Line_Chart{
           draw_aline(lines.get(i));
         }        
       }
-      fill(colors[can_hover][0], colors[can_hover][1], colors[can_hover][2]);
-      stroke(colors[can_hover][0], colors[can_hover][1], colors[can_hover][2]);
+      fill(p.colors[can_hover][0], p.colors[can_hover][1], p.colors[can_hover][2]);
+      stroke(p.colors[can_hover][0], p.colors[can_hover][1], p.colors[can_hover][2]);
       draw_aline(lines.get(can_hover));
       fill(255);
       strokeWeight(4);
@@ -156,9 +154,8 @@ class Line_Chart{
       String par = PARTY;
       for(int i = 0; i < p.candidates.length;i++){
         if (p.candidates[i].party.equals(par)) {
-          println("here");
-          fill(colors[i][0], colors[i][1], colors[i][2]);
-          stroke(colors[i][0], colors[i][1], colors[i][2]);
+          fill(p.colors[i][0], p.colors[i][1], p.colors[i][2]);
+          stroke(p.colors[i][0], p.colors[i][1], p.colors[i][2]);
         } else {
           fill(220);
           stroke(220);
@@ -172,6 +169,7 @@ class Line_Chart{
       for(int i = 0; i < p.candidates.length;i++){
         if (STATE.equals(p.candidates[i].state)) {
           cans.add(i);
+          p.candidates[i].selected = true;
         } else {
           fill(200);
           stroke(200);
@@ -180,8 +178,8 @@ class Line_Chart{
       }
       for(int i = 0; i < cans.size();i++){
         int canid = cans.get(i);
-        fill(colors[canid][0], colors[canid][1], colors[canid][2]);
-        stroke(colors[canid][0], colors[canid][1], colors[canid][2]);
+        fill(p.colors[canid][0], p.colors[canid][1], p.colors[canid][2]);
+        stroke(p.colors[canid][0], p.colors[canid][1], p.colors[canid][2]);
         draw_aline(lines.get(canid));
       }
     }
@@ -200,8 +198,8 @@ class Line_Chart{
         }
       }
       for(int i = 0; i < cans.size(); i++){
-        fill(colors[i][0], colors[i][1], colors[i][2]);
-        stroke(colors[i][0], colors[i][1], colors[i][2]);
+        fill(p.colors[i][0], p.colors[i][1], p.colors[i][2]);
+        stroke(p.colors[i][0], p.colors[i][1], p.colors[i][2]);
         draw_aline(lines.get(i));
       }
     }
@@ -210,12 +208,12 @@ class Line_Chart{
     
    else if (STATE.equals("ALL_STATE") && PARTY.equals("ALL_PARTY")){
       for(int i = 0; i < fundings.length; i++){
-        fill(colors[i][0], colors[i][1], colors[i][2]);
-        stroke(colors[i][0], colors[i][1], colors[i][2]);
+        fill(p.colors[i][0], p.colors[i][1], p.colors[i][2]);
+        stroke(p.colors[i][0], p.colors[i][1], p.colors[i][2]);
         draw_aline(lines.get(i));
       }
     } 
-    if (!loop) draw_axis();
+    
   }
   
   void draw_axis(){
@@ -272,25 +270,25 @@ class Line_Chart{
       if (i < 9){
         for (i = 0; i < 9; i++){
           Button b = new Button(p.candidates[i].lastname,i,(i+1)*60, y_frame-10);
-          b.c = #ffb4b4;
+          b.c = color(p.colors[i][0], p.colors[i][1], p.colors[i][2]);
           bs[i] = b;
         }
       } else if (i < 17){
         for (i = 9; i < 17; i++){
           Button b = new Button(p.candidates[i].lastname,i,(i-8)*60, y_frame+5);
-          b.c = #ffb4b4;
+          b.c = color(p.colors[i][0], p.colors[i][1], p.colors[i][2]);
           bs[i] = b;
         }
       } else if (i < 22){
         for (i = 17; i < 22; i++){
           Button b = new Button(p.candidates[i].lastname,i,(i-16)*60, y_frame+20);
-          b.c = #b5deff;
+          b.c = color(p.colors[i][0], p.colors[i][1], p.colors[i][2]);
           bs[i] = b;
         }
       } else {
         for (i = 22; i < p.candidates.length; i++){
           Button b = new Button(p.candidates[i].lastname,i,(i-21)*60, y_frame+35);
-          b.c = #b3f7af;
+          b.c = color(p.colors[i][0], p.colors[i][1], p.colors[i][2]);
           bs[i] = b;
         }
       }

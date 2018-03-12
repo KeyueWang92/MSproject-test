@@ -64,7 +64,7 @@ void draw(){
 }
 
 
-void mousePressed(){
+void mouseClicked(){
   if(mouseButton == LEFT){
     can = pie_chart.clicked();
     //can2 = lc.clicked();
@@ -76,13 +76,7 @@ void mousePressed(){
       STATE = can.state;
       STATE_MAP = "";
     }
-    //else if(can2 != null){
-    //  PARTY = "ALL_PARTY"; 
-    //  STATE = can2.state;
-    //  STATE_MAP = "";
-    //}
     else if (mouseX >= 620 && mouseX <= 700 && mouseY >= 720 && mouseY <= 750) {
-      println("loop");
       loop = true;
       TIME = 0;
       line_TIME = 8;
@@ -95,6 +89,10 @@ void mousePressed(){
     }
     //get the clicked candidate from pie chart
     else if (map.clicked() != null){
+      //selected_mode ended
+      selected_mode = false;
+      lc.reset();
+      
       STATE = map.clicked();
       STATE_MAP = map.clicked();
       PARTY = "ALL_PARTY";
@@ -108,7 +106,7 @@ void mousePressed(){
       }
       STATE_MAP = "";
     }
-    println(STATE);
+    //println(STATE);
   }else if (mouseButton == RIGHT){
     //reset all
     PARTY = "ALL_PARTY";

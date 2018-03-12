@@ -2,6 +2,9 @@ class Parser{
   private String[] lines;
   public String[] headers;
   public Candidate[] candidates;
+  public int[][] colors = {{255,230,230},{255,204,204},{255,179,179},{255,153,153},{255,128,128},{255,102,102},{255,77,77},{255,51,51},
+                        {255,26,26},{255,0,0},{230,0,0},{204,0,0},{179,0,0},{153,0,0},{128,0,0},{102,0,0},{77,0,0},
+                        {179,217,255},{128,191,255},{77,166,255},{25,140,255},{0,115,230},{159,223,191},{64,191,128},{45,134,89}};
   Parser(String filename) {
     lines = loadStrings(filename);
     candidates = new Candidate[lines.length-1];

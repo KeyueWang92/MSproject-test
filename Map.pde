@@ -37,17 +37,26 @@ class Map{
       }
     
     //for hovered candidate
+    //if (can_hover != -1){
+    //  int state = stateid.get(p.candidates[can_hover].state);
+    //  fill(select_color(statefunding.get(stateid.get(p.candidates[can_hover].state))));
+    //  stroke(#fffa00);
+    //  strokeWeight(2);
+    //  geoMap.draw(state);
+    //  strokeWeight(1);
+    //  textSize(20);
+    //  textAlign(TOP,LEFT);
+    //  text(p.candidates[can_hover].lastname+": $"+p.candidates[can_hover].funding[TIME]/1000000+"M", 800,400);
+    //} 
+    
     if (can_hover != -1){
-      int state = stateid.get(p.candidates[can_hover].state);
-      fill(select_color(statefunding.get(stateid.get(p.candidates[can_hover].state))));
-      stroke(#fffa00);
+      int sid = stateid.get(p.candidates[can_hover].state);
+      stroke(#d0ff00);
       strokeWeight(2);
-      geoMap.draw(state);
+      geoMap.draw(sid);
       strokeWeight(1);
-      textSize(20);
-      textAlign(TOP,LEFT);
-      text(p.candidates[can_hover].lastname+": $"+p.candidates[can_hover].funding[TIME]/1000000+"M", 800,400);
-    } 
+    }
+    
     //else if (can2 == null && can != null){
     if (can != null){
       Set<Integer> states = new HashSet<Integer>();
@@ -66,15 +75,17 @@ class Map{
     //Find the country at mouse position and draw in different colour.
     int id = geoMap.getID(mouseX, mouseY);
     if (id != -1) {
-      stroke(#998285);
-      strokeWeight(2);
-      if (statefunding.containsKey(id)) fill(select_color(statefunding.get(id)));
-      else fill(210);
+      if (statefunding.containsKey(id)) {
+        strokeWeight(5);
+        stroke(select_color(statefunding.get(id)));
+        fill(select_color(statefunding.get(id)));
+      }
+      else fill(220);
       geoMap.draw(id);
       strokeWeight(1);
       // get the state name using id.
       String name = geoMap.getAttributeTable().findRow(str(id),0).getString("Abbrev"); 
-      fill(#00d0ff);
+      fill(100);
       textSize(12);
       text(name, mouseX+5, mouseY-5);
       if (statefunding.containsKey(id)){
@@ -82,21 +93,12 @@ class Map{
         text("$"+funding+"M", mouseX+5, mouseY+10);
       }
     }
-    
-    if (can_hover != -1){
-      int sid = stateid.get(p.candidates[can_hover].state);
-      stroke(#d0ff00);
-      strokeWeight(2);
-      geoMap.draw(sid);
-      strokeWeight(1);
-    }
   }
   
   color select_color(float funding){
     color c = color(255,int(255-funding/3770000),int(255-funding/1800000));
     return c;
   }
-  
   String clicked(){
     int id = geoMap.getID(mouseX, mouseY);
     if (id != -1 && statefunding.containsKey(id)){
