@@ -1,4 +1,0 @@
-COMP177 A4
-
-Keyue Wang: did the line chart and map.
-Ning Zhu: did the pie chart.
