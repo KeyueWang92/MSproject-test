@@ -1,3 +1,5 @@
+/* @pjs preload = "usContinental.dbf usContinental.shp usContinental.shx /code/geoMap.jar";
+*/
 import org.gicentre.geomap.*;
 import java.util.*;
 GeoMap geoMap = new GeoMap(650,20,500,350,this);
